@@ -271,10 +271,14 @@ public class CalculatorTools {
     }
 
     private double[] parseNumbers(String numbers) {
-        return Arrays.stream(numbers.split(","))
-                .map(String::trim)
-                .mapToDouble(Double::parseDouble)
-                .toArray();
+        try {
+            return Arrays.stream(numbers.split(","))
+                    .map(String::trim)
+                    .mapToDouble(Double::parseDouble)
+                    .toArray();
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("无效的数字格式：" + e.getMessage(), e);
+        }
     }
 
     private double convertToMeters(double value, String unit) {

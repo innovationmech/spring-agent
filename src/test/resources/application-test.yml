@@ -1,0 +1,21 @@
+# Test profile configuration
+# This profile is used for integration tests that don't require database connectivity
+
+spring:
+  # Disable datasource auto-configuration for tests
+  datasource:
+    url: ""
+    username: ""
+    password: ""
+  
+  # Use in-memory chat memory
+  ai:
+    vectorstore:
+      pgvector:
+        initialize-schema: false
+
+# Use in-memory chat memory
+chat:
+  memory:
+    type: in-memory
+

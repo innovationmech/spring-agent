@@ -1,0 +1,42 @@
+# MCP Server Stdio Mode Configuration
+# This profile is used when running the application as an MCP Server
+# accessible via standard input/output (suitable for AI IDE integration)
+
+spring:
+  application:
+    name: spring-agent-mcp-server
+  
+  main:
+    web-application-type: none  # Disable web server for stdio mode
+  
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: gpt-oss
+        options:
+          temperature: 0.7
+          max-tokens: 1000
+    
+    mcp:
+      server:
+        enabled: true
+        name: spring-agent-tools
+        version: 1.0.0
+        type: SYNC  # Stdio mode uses SYNC for blocking I/O
+      
+      client:
+        enabled: false  # Disable client in server-only mode
+
+# Disable unnecessary features for stdio mode
+chat:
+  memory:
+    type: in-memory
+
+logging:
+  level:
+    "[org.springframework.ai.mcp]": DEBUG
+    "[dev.jackelyj.spring_agent]": INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
