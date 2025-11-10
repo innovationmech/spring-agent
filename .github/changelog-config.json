@@ -1,0 +1,91 @@
+{
+  "categories": [
+    {
+      "title": "## 🚀 新特性",
+      "labels": ["feature", "enhancement"]
+    },
+    {
+      "title": "## 🐛 Bug 修复",
+      "labels": ["bug", "fix"]
+    },
+    {
+      "title": "## 📝 文档",
+      "labels": ["documentation", "docs"]
+    },
+    {
+      "title": "## 🔧 维护",
+      "labels": ["maintenance", "chore", "refactor"]
+    },
+    {
+      "title": "## 🔒 安全",
+      "labels": ["security"]
+    },
+    {
+      "title": "## ⬆️ 依赖更新",
+      "labels": ["dependencies"]
+    },
+    {
+      "title": "## 🎨 样式",
+      "labels": ["style"]
+    },
+    {
+      "title": "## ⚡ 性能",
+      "labels": ["performance"]
+    },
+    {
+      "title": "## 🧪 测试",
+      "labels": ["test"]
+    }
+  ],
+  "ignore_labels": [
+    "ignore-changelog"
+  ],
+  "sort": "ASC",
+  "template": "${{CHANGELOG}}\n\n**完整变更**: ${{RELEASE_DIFF}}",
+  "pr_template": "- ${{TITLE}} (#${{NUMBER}})",
+  "empty_template": "- 无重大变更",
+  "label_extractor": [
+    {
+      "pattern": "(.)*(\\[feature\\]|\\[feat\\])(.)*()",
+      "target": "feature"
+    },
+    {
+      "pattern": "(.)*(\\[fix\\]|\\[bug\\])(.)*()",
+      "target": "bug"
+    },
+    {
+      "pattern": "(.)*(\\[docs\\])(.)*()",
+      "target": "documentation"
+    },
+    {
+      "pattern": "(.)*(\\[chore\\])(.)*()",
+      "target": "chore"
+    }
+  ],
+  "duplicate_filter": {
+    "pattern": "\\[ABC-....\\]",
+    "on_property": "title",
+    "method": "match"
+  },
+  "transformers": [
+    {
+      "pattern": "[\\-\\*] (\\[(...|TEST|CI|SKIP)\\])( )?(.+?)\n(.+?[\\-\\*] )(.+)",
+      "target": "- $4\n  - $6"
+    }
+  ],
+  "max_tags_to_fetch": 200,
+  "max_pull_requests": 200,
+  "max_back_track_time_days": 365,
+  "exclude_merge_branches": [
+    "develop",
+    "dev"
+  ],
+  "tag_resolver": {
+    "method": "sort",
+    "filter": {
+      "pattern": "v\\d+\\.\\d+\\.\\d+",
+      "flags": "gu"
+    }
+  }
+}
+

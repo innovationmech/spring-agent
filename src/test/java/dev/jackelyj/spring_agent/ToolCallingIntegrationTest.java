@@ -17,7 +17,8 @@ import org.junit.jupiter.api.Tag;
 @SpringBootTest
 @TestPropertySource(properties = {
     "spring.ai.ollama.base-url=http://localhost:11434",
-    "spring.ai.ollama.chat.model=gpt-oss"
+    "spring.ai.ollama.chat.model=gpt-oss",
+    "chat.memory.type=in-memory"
 })
 @Tag("integration")
 public class ToolCallingIntegrationTest {

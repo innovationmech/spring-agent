@@ -1,5 +1,11 @@
 # Spring Agent - AI Chat Application with Tool Calling
 
+[![CI/CD Pipeline](https://github.com/jackelyj/spring-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/jackelyj/spring-agent/actions/workflows/ci.yml)
+[![Code Quality](https://github.com/jackelyj/spring-agent/actions/workflows/code-quality.yml/badge.svg)](https://github.com/jackelyj/spring-agent/actions/workflows/code-quality.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Java 21](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.org/projects/jdk/21/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2+-green.svg)](https://spring.io/projects/spring-boot)
+
 A Spring Boot application that demonstrates Spring AI Tool Calling integration with Ollama, providing an intelligent chat assistant that can automatically invoke various tools to answer user questions.
 
 ## 🚀 Features
@@ -59,8 +65,9 @@ A Spring Boot application that demonstrates Spring AI Tool Calling integration w
 # Install Ollama (macOS)
 brew install ollama
 
-# Pull a model (recommended)
-ollama pull gpt-oss
+# Pull required models
+ollama pull gpt-oss           # Chat model
+ollama pull nomic-embed-text  # Embedding model (for vector store)
 
 # Start Ollama service
 ollama serve
@@ -81,6 +88,17 @@ cd spring-agent
 ```
 
 The application will start on `http://localhost:8080`.
+
+### 3. Using Docker (Optional)
+
+```bash
+# Start PostgreSQL + pgvector
+docker-compose up -d
+
+# Run with PostgreSQL profile
+./gradlew bootRun --args='--spring.profiles.active=postgres'
+```
+
 
 ## 🎯 Quick Start
 
@@ -353,9 +371,12 @@ Add tests in `ToolCallingIntegrationTest.java`.
 
 ## 📚 Documentation
 
-- [TOOL_CALLING_GUIDE.md](TOOL_CALLING_GUIDE.md) - Comprehensive tool calling integration guide
-- [SPRING_AI_CHATCLIENT_GUIDE.md](SPRING_AI_CHATCLIENT_GUIDE.md) - Detailed Spring AI ChatClient configuration
-- [SPRING_AI_QUICK_REFERENCE.md](SPRING_AI_QUICK_REFERENCE.md) - Quick reference for Spring AI features
+- [TOOL_CALLING_GUIDE.md](docs/TOOL_CALLING_GUIDE.md) - Comprehensive tool calling integration guide
+- [SPRING_AI_CHATCLIENT_GUIDE.md](docs/SPRING_AI_CHATCLIENT_GUIDE.md) - Detailed Spring AI ChatClient configuration
+- [SPRING_AI_QUICK_REFERENCE.md](docs/SPRING_AI_QUICK_REFERENCE.md) - Quick reference for Spring AI features
+- [POSTGRESQL_CHATMEMORY_INTEGRATION.md](docs/POSTGRESQL_CHATMEMORY_INTEGRATION.md) - PostgreSQL + pgvector integration guide
+- [INTEGRATION_TESTS.md](docs/INTEGRATION_TESTS.md) - Integration testing guide
+- [GITHUB_ACTIONS_GUIDE.md](docs/GITHUB_ACTIONS_GUIDE.md) - CI/CD configuration and usage guide
 - [CLAUDE.md](CLAUDE.md) - Development guidelines for Claude Code
 
 ## 🤝 Contributing

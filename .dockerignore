@@ -1,0 +1,77 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Gradle
+.gradle
+build/
+!build/libs/*.jar
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
+*.swp
+*.bak
+*.tmp
+*.orig
+*~.nib
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# Logs
+logs/
+*.log
+
+# Test
+test-output/
+build/reports/
+build/test-results/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Docker
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# GitHub
+.github/
+
+# Demo
+demo.sh
+request.http
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+
+# OS generated
+.Spotlight-V100
+.Trashes
+
