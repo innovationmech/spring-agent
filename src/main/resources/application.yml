@@ -5,6 +5,9 @@ spring:
   profiles:
     active: memory  # Options: memory, postgres
   
+  main:
+    allow-bean-definition-overriding: true
+  
   # PostgreSQL DataSource (activated when profile is 'postgres')
   datasource:
     url: jdbc:postgresql://localhost:5432/spring_ai_db
