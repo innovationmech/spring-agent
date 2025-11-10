@@ -114,6 +114,8 @@ Or use the HTTP request file `request.http` for manual API testing.
 - `TOOL_CALLING_GUIDE.md` - Comprehensive tool calling integration guide
 - `SPRING_AI_CHATCLIENT_GUIDE.md` - Detailed Spring AI ChatClient configuration guide
 - `SPRING_AI_QUICK_REFERENCE.md` - Quick reference for Spring AI features
+- `POSTGRESQL_CHATMEMORY_INTEGRATION.md` - Complete guide for PostgreSQL + pgvector ChatMemory integration
+- `INTEGRATION_TESTS.md` - Integration testing guide for PostgreSQL and vector store features
 
 ## PostgreSQL + pgvector Integration
 
