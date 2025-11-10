@@ -1,0 +1,38 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/liyanjie/IdeaProjects",
+        "/Users/liyanjie/Interviews",
+        "/Users/liyanjie/VSCodeProjects",
+        "/Users/liyanjie/XcodeProjects"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_ACCESS_TOKEN}"
+      }
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp",
+        "--api-key",
+        "${UPSTASH_API_KEY}"
+      ],
+      "env": {
+        "UPSTASH_API_KEY": "${UPSTASH_API_KEY}"
+      }
+    }
+  }
+}
