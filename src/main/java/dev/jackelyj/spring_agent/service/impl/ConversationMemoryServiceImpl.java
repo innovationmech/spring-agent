@@ -24,6 +24,17 @@ public class ConversationMemoryServiceImpl implements ConversationMemoryService 
     
     private final ChatMemoryRepository chatMemoryRepository;
 
+    /**
+     * 清理日志输入以防止日志注入攻击
+     * 移除或转义换行符和回车符
+     */
+    private String sanitizeForLog(String input) {
+        if (input == null) {
+            return null;
+        }
+        return input.replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t");
+    }
+
     public ConversationMemoryServiceImpl(ChatMemoryRepository chatMemoryRepository) {
         this.chatMemoryRepository = chatMemoryRepository;
     }
@@ -31,12 +42,12 @@ public class ConversationMemoryServiceImpl implements ConversationMemoryService 
     @Override
     public boolean clearConversation(String conversationId) {
         try {
-            log.info("Clearing conversation: {}", conversationId);
+            log.info("Clearing conversation: {}", sanitizeForLog(conversationId));
             chatMemoryRepository.clearConversation(conversationId);
-            log.info("Successfully cleared conversation: {}", conversationId);
+            log.info("Successfully cleared conversation: {}", sanitizeForLog(conversationId));
             return true;
         } catch (Exception e) {
-            log.error("Failed to clear conversation: {}", conversationId, e);
+            log.error("Failed to clear conversation: {}", sanitizeForLog(conversationId), e);
             return false;
         }
     }
@@ -58,10 +69,10 @@ public class ConversationMemoryServiceImpl implements ConversationMemoryService 
     public int getConversationMessageCount(String conversationId) {
         try {
             int count = chatMemoryRepository.getMessageCount(conversationId);
-            log.debug("Conversation {} has {} messages", conversationId, count);
+            log.debug("Conversation {} has {} messages", sanitizeForLog(conversationId), count);
             return count;
         } catch (Exception e) {
-            log.error("Failed to get message count for conversation: {}", conversationId, e);
+            log.error("Failed to get message count for conversation: {}", sanitizeForLog(conversationId), e);
             return 0;
         }
     }
@@ -81,12 +92,12 @@ public class ConversationMemoryServiceImpl implements ConversationMemoryService 
     @Override
     public List<Message> exportConversation(String conversationId) {
         try {
-            log.info("Exporting conversation: {}", conversationId);
+            log.info("Exporting conversation: {}", sanitizeForLog(conversationId));
             List<Message> messages = chatMemoryRepository.getConversationHistory(conversationId);
-            log.info("Exported {} messages from conversation: {}", messages.size(), conversationId);
+            log.info("Exported {} messages from conversation: {}", messages.size(), sanitizeForLog(conversationId));
             return messages;
         } catch (Exception e) {
-            log.error("Failed to export conversation: {}", conversationId, e);
+            log.error("Failed to export conversation: {}", sanitizeForLog(conversationId), e);
             return List.of();
         }
     }
@@ -96,7 +107,7 @@ public class ConversationMemoryServiceImpl implements ConversationMemoryService 
         try {
             return chatMemoryRepository.conversationExists(conversationId);
         } catch (Exception e) {
-            log.error("Failed to check if conversation exists: {}", conversationId, e);
+            log.error("Failed to check if conversation exists: {}", sanitizeForLog(conversationId), e);
             return false;
         }
     }

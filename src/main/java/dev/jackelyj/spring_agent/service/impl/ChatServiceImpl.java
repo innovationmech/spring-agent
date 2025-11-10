@@ -27,6 +27,17 @@ public class ChatServiceImpl implements ChatService {
     private final ChatClient streamingChatClient;
     private final ConversationMemoryService conversationMemoryService;
 
+    /**
+     * 清理日志输入以防止日志注入攻击
+     * 移除或转义换行符和回车符
+     */
+    private String sanitizeForLog(String input) {
+        if (input == null) {
+            return null;
+        }
+        return input.replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t");
+    }
+
     @Autowired
     public ChatServiceImpl(ChatClient chatClient,
                            @Qualifier("streamingChatClient") ChatClient streamingChatClient,
@@ -39,7 +50,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public ChatResponse chat(ChatRequest request) {
         try {
-            logger.info("Processing chat request for conversation: {}", request.getConversationId());
+            logger.info("Processing chat request for conversation: {}", sanitizeForLog(request.getConversationId()));
 
             String conversationId = getOrCreateConversationId(request);
 
@@ -55,7 +66,7 @@ public class ChatServiceImpl implements ChatService {
 
             String response = promptBuilder.call().content();
 
-            logger.info("Successfully generated response for conversation: {}", conversationId);
+            logger.info("Successfully generated response for conversation: {}", sanitizeForLog(conversationId));
             return new ChatResponse(response, conversationId, false);
 
         } catch (Exception e) {
@@ -68,7 +79,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public Flux<ChatResponse> chatStream(ChatRequest request) {
         try {
-            logger.info("Processing streaming chat request for conversation: {}", request.getConversationId());
+            logger.info("Processing streaming chat request for conversation: {}", sanitizeForLog(request.getConversationId()));
 
             String conversationId = getOrCreateConversationId(request);
 
@@ -85,10 +96,10 @@ public class ChatServiceImpl implements ChatService {
             return promptBuilder.stream()
                     .content()
                     .map(content -> new ChatResponse(content, conversationId, true))
-                    .doOnComplete(() -> logger.info("Streaming completed for conversation: {}", conversationId))
+                    .doOnComplete(() -> logger.info("Streaming completed for conversation: {}", sanitizeForLog(conversationId)))
                     .onErrorReturn(new ChatResponse("Error in streaming response", conversationId, true))
                     .doOnError(error -> logger.error("Streaming error for conversation {}: {}",
-                            conversationId, error.getMessage()));
+                            sanitizeForLog(conversationId), error.getMessage()));
 
         } catch (Exception e) {
             logger.error("Error processing streaming chat request: {}", e.getMessage(), e);
@@ -99,7 +110,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public boolean clearConversation(String conversationId) {
-        logger.info("Clearing conversation memory for ID: {}", conversationId);
+        logger.info("Clearing conversation memory for ID: {}", sanitizeForLog(conversationId));
         return conversationMemoryService.clearConversation(conversationId);
     }
 
