@@ -42,12 +42,12 @@ jobs:
         run: chmod +x gradlew
 
       - name: 运行单元测试
-        run: ./gradlew test --exclude-tag integration
+        run: ./gradlew test
         env:
           SPRING_PROFILES_ACTIVE: memory
 
       - name: 运行集成测试
-        run: ./gradlew test --tests "*IntegrationTest" --tests "*PostgresChatMemoryIntegrationTest"
+        run: ./gradlew integrationTest
         env:
           SPRING_PROFILES_ACTIVE: postgres
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/spring_ai_db
