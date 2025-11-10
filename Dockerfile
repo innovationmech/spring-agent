@@ -1,5 +1,5 @@
 # 多阶段构建 Dockerfile for Spring Agent
-FROM eclipse-temurin:21-jdk-alpine AS builder
+FROM eclipse-temurin:25-jdk-alpine AS builder
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ COPY src ./src
 RUN ./gradlew build -x test --no-daemon
 
 # 运行时镜像
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 
 LABEL maintainer="jackelyj <your-email@example.com>"
 LABEL description="Spring AI Tool Calling with Ollama"
