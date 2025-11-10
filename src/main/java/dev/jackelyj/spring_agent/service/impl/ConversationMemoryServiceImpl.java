@@ -26,13 +26,21 @@ public class ConversationMemoryServiceImpl implements ConversationMemoryService 
 
     /**
      * 清理日志输入以防止日志注入攻击
-     * 移除或转义换行符和回车符
+     * 创建一个安全的字符串，只包含字母数字和常见符号
      */
     private String sanitizeForLog(String input) {
         if (input == null) {
-            return null;
+            return "null";
         }
-        return input.replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t");
+        // 只保留字母、数字、连字符和下划线，这对于 UUID 和常见 ID 格式足够了
+        // 这会完全打破任何潜在的注入攻击
+        StringBuilder result = new StringBuilder(input.length());
+        for (char c : input.toCharArray()) {
+            if (Character.isLetterOrDigit(c) || c == '-' || c == '_') {
+                result.append(c);
+            }
+        }
+        return result.toString();
     }
 
     public ConversationMemoryServiceImpl(ChatMemoryRepository chatMemoryRepository) {
