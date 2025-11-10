@@ -6,13 +6,23 @@ import dev.jackelyj.spring_agent.tools.SystemInfoTools;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration for ChatClient beans.
+ * 
+ * SOLID Principles:
+ * - SRP: Only responsible for creating ChatClient beans (ChatMemory creation moved to ChatMemoryConfig)
+ * - DIP: Depends on ChatMemory abstraction, not concrete implementation
+ * - OCP: Open for extension with new chat client configurations
+ * 
+ * Note: ChatMemory bean is now provided by ChatMemoryConfig,
+ * which supports both in-memory and JDBC implementations based on configuration.
+ */
 @Configuration
 public class ChatClientConfig {
 
@@ -22,13 +32,10 @@ public class ChatClientConfig {
     @Value("${spring.ai.ollama.chat.options.temperature:0.7}")
     private Double temperature;
 
-    @Bean
-    public ChatMemory chatMemory() {
-        return MessageWindowChatMemory.builder()
-                .maxMessages(10)
-                .build();
-    }
-
+    /**
+     * Configure tool objects for ChatClient.
+     * Tools are automatically discovered and made available to the AI.
+     */
     @Bean
     public Object[] toolObjects(DateTimeTools dateTimeTools,
                                CalculatorTools calculatorTools,
@@ -36,6 +43,14 @@ public class ChatClientConfig {
         return new Object[]{dateTimeTools, calculatorTools, systemInfoTools};
     }
 
+    /**
+     * Configure main ChatClient for synchronous conversations.
+     * 
+     * Dependencies are injected, following DIP:
+     * - ChatMemory: Abstraction provided by ChatMemoryConfig
+     * - OllamaChatModel: Auto-configured by Spring AI
+     * - toolObjects: Configured in this class
+     */
     @Bean
     public ChatClient chatClient(OllamaChatModel ollamaChatModel,
                                ChatMemory chatMemory,
@@ -52,6 +67,9 @@ public class ChatClientConfig {
                 .build();
     }
 
+    /**
+     * Configure streaming ChatClient for asynchronous conversations.
+     */
     @Bean("streamingChatClient")
     public ChatClient streamingChatClient(OllamaChatModel ollamaChatModel,
                                         ChatMemory chatMemory,

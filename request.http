@@ -1,6 +1,76 @@
+### Chat Endpoint - Basic Request
 POST http://localhost:8080/api/v1/chat
 Content-Type: application/json
 
 {
     "message": "16的平方根是多少？"
 }
+
+### Chat Endpoint - With Conversation ID
+POST http://localhost:8080/api/v1/chat
+Content-Type: application/json
+
+{
+    "message": "请记住我的名字是张三",
+    "conversationId": "conv-001"
+}
+
+### Clear Specific Conversation
+DELETE http://localhost:8080/api/v1/chat/clear/conv-001
+
+### Clear All Conversations
+POST http://localhost:8080/api/v1/chat/clear-all
+
+### Get All Conversations
+GET http://localhost:8080/api/v1/conversations
+
+### Get Conversation Message Count
+GET http://localhost:8080/api/v1/conversations/conv-001/count
+
+### Health Check
+GET http://localhost:8080/api/v1/health/service
+
+### ==================== Document Management Endpoints ====================
+
+### Upload Documents
+POST http://localhost:8080/api/v1/documents
+Content-Type: application/json
+
+{
+    "texts": [
+        "Spring AI 是一个用于构建 AI 应用的 Spring 框架扩展。",
+        "PostgreSQL 是一个强大的开源关系型数据库。",
+        "pgvector 是 PostgreSQL 的向量相似度搜索扩展。"
+    ],
+    "metadata": {
+        "source": "manual_upload",
+        "category": "technology"
+    }
+}
+
+### Search Documents
+POST http://localhost:8080/api/v1/documents/search
+Content-Type: application/json
+
+{
+    "query": "数据库",
+    "topK": 5,
+    "threshold": 0.0
+}
+
+### Search Documents with Filter
+POST http://localhost:8080/api/v1/documents/search
+Content-Type: application/json
+
+{
+    "query": "Spring",
+    "topK": 10,
+    "threshold": 0.5,
+    "filterExpression": "category == 'technology'"
+}
+
+### Delete Documents
+DELETE http://localhost:8080/api/v1/documents
+Content-Type: application/json
+
+["document-id-1", "document-id-2"]
