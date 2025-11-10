@@ -1,7 +1,5 @@
 # Spring Agent - AI Chat Application with Tool Calling
 
-[![CI/CD Pipeline](https://github.com/jackelyj/spring-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/jackelyj/spring-agent/actions/workflows/ci.yml)
-[![Code Quality](https://github.com/jackelyj/spring-agent/actions/workflows/code-quality.yml/badge.svg)](https://github.com/jackelyj/spring-agent/actions/workflows/code-quality.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Java 21](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.org/projects/jdk/21/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2+-green.svg)](https://spring.io/projects/spring-boot)
