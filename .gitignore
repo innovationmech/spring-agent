@@ -39,3 +39,6 @@ out/
 _docs/
 
 .cursor/
+
+# MCP configuration files (contains sensitive tokens)
+.mcp.json
