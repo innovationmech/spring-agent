@@ -49,6 +49,50 @@ A Spring Boot application that demonstrates Spring AI Tool Calling integration w
 - Health check endpoints
 - Conversation memory management
 
+### 🔌 Model Context Protocol (MCP) Support
+
+Spring Agent now supports MCP, enabling seamless integration with AI assistants and applications:
+
+#### MCP Server Features
+- **34 Tools Exposed**: All DateTime, Calculator, and System Info tools available via MCP
+- **Dual Transport**: Stdio (for AI IDEs) and SSE/HTTP (for remote access)
+- **Auto-Discovery**: Tools automatically registered and exposed
+- **Standards Compliant**: Full MCP specification implementation via Spring AI
+
+#### MCP Client Features
+- **External Tool Access**: Connect to and use external MCP servers
+- **Multi-Server Support**: Manage multiple MCP connections simultaneously
+- **Resource Reading**: Access files and resources from external servers
+- **Health Monitoring**: Built-in connection health checks
+
+#### Quick MCP Setup
+
+**As MCP Server (for AI IDEs like Claude/Cursor):**
+```bash
+# Start in Stdio mode
+./scripts/mcp-server-stdio.sh
+```
+
+**Configure in Claude Desktop:**
+```json
+{
+  "mcpServers": {
+    "spring-agent": {
+      "command": "/path/to/spring-agent/scripts/mcp-server-stdio.sh"
+    }
+  }
+}
+```
+
+**As MCP Server (for remote access):**
+```bash
+# Start in SSE mode
+./scripts/mcp-server-sse.sh
+# Access at: http://localhost:8080/mcp/message
+```
+
+**📖 Full MCP Documentation**: See [MCP Integration Guide](docs/MCP_INTEGRATION_GUIDE.md)
+
 ## 📋 Prerequisites
 
 - **Java 21** or higher
@@ -301,29 +345,84 @@ Check the health status of all services.
 }
 ```
 
+#### GET /health/mcp
+Check MCP Server and Client health status.
+
+**Response:**
+```json
+{
+  "status": "UP",
+  "timestamp": "2025-01-15T10:30:00",
+  "mcpServer": {
+    "enabled": true,
+    "name": "spring-agent-tools",
+    "version": "1.0.0",
+    "status": "ACTIVE",
+    "toolsCount": 34,
+    "toolCategories": {
+      "dateTime": 11,
+      "calculator": 13,
+      "systemInfo": 10
+    },
+    "transports": {
+      "sse": {
+        "enabled": true,
+        "endpoint": "/mcp/message"
+      },
+      "stdio": {
+        "enabled": true,
+        "profile": "mcp-stdio"
+      }
+    }
+  },
+  "mcpClient": {
+    "enabled": false,
+    "status": "DISABLED"
+  }
+}
+```
+
 ## 🏗️ Project Structure
 
 ```
 src/main/java/dev/jackelyj/spring_agent/
 ├── SpringAgentApplication.java     # Main application class
 ├── config/
-│   └── ChatClientConfig.java       # AI and ChatClient configuration
+│   ├── ChatClientConfig.java       # AI and ChatClient configuration
+│   ├── ChatMemoryConfig.java       # Chat memory configuration
+│   └── VectorStoreConfig.java      # Vector store configuration
 ├── controller/
 │   ├── ChatController.java         # REST API endpoints
-│   └── HealthController.java       # Health check endpoints
+│   ├── HealthController.java       # Health check endpoints (with MCP)
+│   └── DocumentController.java     # Document management endpoints
 ├── dto/
 │   ├── ChatRequest.java           # Chat request DTO
 │   └── ChatResponse.java          # Chat response DTO
+├── mcp/                            # MCP Integration (NEW)
+│   ├── service/
+│   │   └── McpClientService.java  # MCP client service
+│   └── controller/
+│       └── McpDemoController.java # MCP demo endpoints
 ├── service/
 │   ├── ChatService.java           # Chat service interface
 │   ├── ConversationMemoryService.java  # Memory service interface
+│   ├── DocumentService.java       # Document service interface
 │   └── impl/                      # Service implementations
 ├── tools/
-│   ├── CalculatorTools.java       # Mathematical operations
-│   ├── DateTimeTools.java         # Date/time operations
-│   └── SystemInfoTools.java       # System monitoring
+│   ├── CalculatorTools.java       # Mathematical operations (MCP-exposed)
+│   ├── DateTimeTools.java         # Date/time operations (MCP-exposed)
+│   └── SystemInfoTools.java       # System monitoring (MCP-exposed)
 └── demo/
     └── ToolCallingDemo.java       # Demonstration class
+
+scripts/                            # Startup scripts (NEW)
+├── mcp-server-stdio.sh            # MCP Server Stdio mode
+└── mcp-server-sse.sh              # MCP Server SSE/HTTP mode
+
+docs/                               # Documentation
+├── MCP_INTEGRATION_GUIDE.md       # MCP integration guide (NEW)
+├── TOOL_CALLING_GUIDE.md          # Tool calling guide
+└── POSTGRESQL_CHATMEMORY_INTEGRATION.md  # PostgreSQL guide
 ```
 
 ## 🔍 Development

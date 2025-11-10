@@ -1,0 +1,149 @@
+{
+  "_comment": "MCP Client Configuration Examples for Spring Agent Tools",
+  "_description": "This file provides configuration examples for connecting to Spring Agent's MCP Server from various MCP clients like Claude Desktop, Cursor, or other MCP-compatible applications.",
+  
+  "examples": {
+    "stdio_mode": {
+      "_description": "Stdio mode - Suitable for local MCP clients that can spawn child processes",
+      "_usage": "Copy the 'spring-agent-tools' configuration to your MCP client's config file",
+      
+      "mcpServers": {
+        "spring-agent-tools": {
+          "command": "java",
+          "args": [
+            "-jar",
+            "/absolute/path/to/spring-agent/build/libs/spring-agent-0.0.1-SNAPSHOT.jar",
+            "--spring.profiles.active=mcp-stdio"
+          ],
+          "env": {
+            "SPRING_AI_OLLAMA_BASE_URL": "http://localhost:11434"
+          }
+        }
+      }
+    },
+    
+    "stdio_with_script": {
+      "_description": "Using the provided startup script (recommended)",
+      
+      "mcpServers": {
+        "spring-agent-tools": {
+          "command": "/absolute/path/to/spring-agent/scripts/mcp-server-stdio.sh",
+          "args": []
+        }
+      }
+    },
+    
+    "sse_mode": {
+      "_description": "SSE/HTTP mode - Suitable for remote MCP clients or when the server is already running",
+      "_prerequisite": "Start the MCP server first: ./scripts/mcp-server-sse.sh",
+      
+      "mcpServers": {
+        "spring-agent-tools": {
+          "url": "http://localhost:8080/mcp/message",
+          "transport": "sse"
+        }
+      }
+    },
+    
+    "sse_remote": {
+      "_description": "SSE mode connecting to a remote server",
+      
+      "mcpServers": {
+        "spring-agent-tools-remote": {
+          "url": "http://your-server-address:8080/mcp/message",
+          "transport": "sse"
+        }
+      }
+    }
+  },
+  
+  "tools_available": {
+    "_comment": "Spring Agent provides 34 tools across 3 categories",
+    
+    "dateTime": {
+      "count": 11,
+      "tools": [
+        "getCurrentDateTime",
+        "getCurrentDate",
+        "getCurrentTime",
+        "getCurrentTimeInTimeZone",
+        "calculateDaysBetween",
+        "addDaysToDate",
+        "formatDateTime",
+        "getCurrentTimestamp",
+        "timestampToDateTime",
+        "isLeapYear",
+        "getDaysInMonth"
+      ]
+    },
+    
+    "calculator": {
+      "count": 13,
+      "tools": [
+        "calculate",
+        "power",
+        "squareRoot",
+        "logarithm",
+        "trigonometric",
+        "average",
+        "sum",
+        "minMax",
+        "factorial",
+        "percentage",
+        "convertLength",
+        "convertTemperature"
+      ]
+    },
+    
+    "systemInfo": {
+      "count": 10,
+      "tools": [
+        "getSystemHealth",
+        "getMemoryUsage",
+        "getSystemInfo",
+        "getJavaRuntimeInfo",
+        "getEnvironmentVariables",
+        "getSystemProperties",
+        "runGarbageCollection",
+        "getDiskUsage",
+        "getCpuInfo",
+        "getThreadInfo"
+      ]
+    }
+  },
+  
+  "setup_instructions": {
+    "step1": "Build the application: ./gradlew bootJar",
+    "step2_stdio": "For Stdio mode: Update paths in the configuration above and add to your MCP client config",
+    "step2_sse": "For SSE mode: Start the server with ./scripts/mcp-server-sse.sh, then configure your client to use the HTTP endpoint",
+    "step3": "Verify connection: Use the MCP client to list available tools",
+    "step4": "Test a tool: Try calling 'getCurrentDateTime' or 'calculate' to verify the integration"
+  },
+  
+  "claude_desktop_example": {
+    "_file_path": "~/Library/Application Support/Claude/claude_desktop_config.json (macOS) or %APPDATA%/Claude/claude_desktop_config.json (Windows)",
+    
+    "mcpServers": {
+      "spring-agent-tools": {
+        "command": "java",
+        "args": [
+          "-jar",
+          "/Users/your-username/IdeaProjects/spring-agent/build/libs/spring-agent-0.0.1-SNAPSHOT.jar",
+          "--spring.profiles.active=mcp-stdio"
+        ]
+      }
+    }
+  },
+  
+  "cursor_example": {
+    "_file_path": "~/.cursor/mcp.json",
+    
+    "mcpServers": {
+      "spring-agent": {
+        "command": "/Users/your-username/IdeaProjects/spring-agent/scripts/mcp-server-stdio.sh",
+        "type": "stdio"
+      }
+    }
+  }
+}
+
