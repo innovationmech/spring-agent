@@ -1,0 +1,88 @@
+name: 标记过期 Issues 和 PRs
+
+on:
+  schedule:
+    # 每天凌晨 1 点运行
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          
+          # Issues 配置
+          days-before-stale: 60
+          days-before-close: 14
+          stale-issue-message: |
+            👋 此 Issue 已经 60 天没有活动了。
+            
+            为了保持项目整洁，我们将在 14 天后自动关闭此 Issue。
+            
+            如果这个问题仍然存在或相关，请：
+            - 添加评论说明当前状态
+            - 提供更多信息或上下文
+            - 如果已解决，请关闭此 Issue
+            
+            感谢您的理解！🙏
+          stale-issue-label: 'stale'
+          close-issue-message: |
+            🔒 此 Issue 已自动关闭，因为长时间没有活动。
+            
+            如果问题仍然存在，请随时重新打开或创建新的 Issue。
+            
+            感谢您的贡献！
+          
+          # PR 配置
+          days-before-pr-stale: 30
+          days-before-pr-close: 14
+          stale-pr-message: |
+            👋 此 Pull Request 已经 30 天没有活动了。
+            
+            为了保持项目整洁，我们将在 14 天后自动关闭此 PR。
+            
+            如果您仍在进行这项工作，请：
+            - 添加评论说明当前进度
+            - 推送新的提交
+            - 请求审查
+            
+            如果已经不再相关，可以关闭此 PR。
+            
+            感谢您的贡献！🙏
+          stale-pr-label: 'stale'
+          close-pr-message: |
+            🔒 此 Pull Request 已自动关闭，因为长时间没有活动。
+            
+            如果您仍想继续这项工作，请随时重新打开或创建新的 PR。
+            
+            感谢您的贡献！
+          
+          # 豁免标签（具有这些标签的不会被标记为过期）
+          exempt-issue-labels: 'pinned,security,enhancement,good-first-issue'
+          exempt-pr-labels: 'pinned,security,work-in-progress'
+          
+          # 豁免分配人（已分配的不会被标记为过期）
+          exempt-assignees: true
+          
+          # 豁免里程碑（在里程碑中的不会被标记为过期）
+          exempt-milestones: true
+          
+          # 仅标记，不关闭（设置为 true 则只标记不关闭）
+          operations-per-run: 100
+          
+          # 删除过期标签的条件
+          remove-stale-when-updated: true
+          
+          # 是否关闭已标记为过期的 Issues/PRs
+          delete-branch: false
+          
+          # 日志级别
+          debug-only: false
+

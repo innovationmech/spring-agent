@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.7'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'jacoco'
+	id 'checkstyle'
 }
 
 group = 'dev.jackelyj'
@@ -51,8 +53,70 @@ dependencyManagement {
 	}
 }
 
+// 配置测试任务
 tasks.named('test') {
 	useJUnitPlatform {
 		excludeTags 'integration'
 	}
+}
+
+// 创建集成测试任务
+task integrationTest(type: Test) {
+	useJUnitPlatform {
+		includeTags 'integration'
+	}
+	description = 'Runs integration tests.'
+	group = 'verification'
+	
+	shouldRunAfter test
+}
+
+// 配置 JaCoCo 测试覆盖率
+jacoco {
+	toolVersion = "0.8.12"
+}
+
+jacocoTestReport {
+	dependsOn test
+	
+	reports {
+		xml.required = true
+		html.required = true
+		csv.required = false
+	}
+	
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+				'**/config/**',
+				'**/dto/**',
+				'**/SpringAgentApplication.class'
+			])
+		}))
+	}
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.70
+			}
+		}
+	}
+}
+
+// 配置 Checkstyle
+checkstyle {
+	toolVersion = '10.12.4'
+	configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+	ignoreFailures = true
+}
+
+checkstyleMain {
+	source = 'src/main/java'
+}
+
+checkstyleTest {
+	source = 'src/test/java'
 }

@@ -1,0 +1,67 @@
+# PR 自动标签配置
+
+# 文档相关
+documentation:
+  - changed-files:
+    - any-glob-to-any-file: ['docs/**', '*.md', 'README.*']
+
+# 配置文件
+configuration:
+  - changed-files:
+    - any-glob-to-any-file: ['*.yml', '*.yaml', '*.properties', '*.toml']
+
+# 测试相关
+test:
+  - changed-files:
+    - any-glob-to-any-file: ['**/test/**', '**/*Test.java', '**/*IntegrationTest.java']
+
+# 工具相关
+tools:
+  - changed-files:
+    - any-glob-to-any-file: ['**/tools/**', '**/CalculatorTools.java', '**/DateTimeTools.java', '**/SystemInfoTools.java']
+
+# 服务层
+service:
+  - changed-files:
+    - any-glob-to-any-file: ['**/service/**']
+
+# 控制器层
+controller:
+  - changed-files:
+    - any-glob-to-any-file: ['**/controller/**']
+
+# 配置层
+config:
+  - changed-files:
+    - any-glob-to-any-file: ['**/config/**']
+
+# DTO/模型
+dto:
+  - changed-files:
+    - any-glob-to-any-file: ['**/dto/**', '**/model/**']
+
+# 数据库相关
+database:
+  - changed-files:
+    - any-glob-to-any-file: ['**/repository/**', '**/db/**', 'docker-compose.yml', '**/init.sql']
+
+# CI/CD
+ci-cd:
+  - changed-files:
+    - any-glob-to-any-file: ['.github/**', 'Dockerfile', '.dockerignore', 'docker-compose.yml']
+
+# 构建系统
+build:
+  - changed-files:
+    - any-glob-to-any-file: ['build.gradle', 'settings.gradle', 'gradle/**', 'gradlew*']
+
+# 依赖
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file: ['build.gradle', 'gradle.properties']
+
+# Spring AI
+spring-ai:
+  - changed-files:
+    - any-glob-to-any-file: ['**/ChatClientConfig.java', '**/ChatMemoryConfig.java', '**/VectorStoreConfig.java']
+
