@@ -1,0 +1,21 @@
+pluginManagement {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        mavenCentral()
+        gradlePluginPortal()
+        google()
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        // 依赖仓库
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        mavenCentral()
+        google()
+    }
+}
+
+rootProject.name = 'spring-agent'

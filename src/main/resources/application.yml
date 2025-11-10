@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: spring-agent
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: gpt-oss
+        options:
+          temperature: 0.7
+          max-tokens: 1000
+          top-p: 0.9
+
+server:
+  port: 8080
+
+logging:
+  level:
+    "[org.springframework.ai]": DEBUG
+    "[dev.jackelyj.spring_agent]": INFO
+    "[org.springframework.ai.chat.client.advisor]": DEBUG
